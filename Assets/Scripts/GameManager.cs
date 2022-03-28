@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 	UIManager uiManager;
 	bool playerHasItem;
 	float boundaryWarningCountdown;
-	float boundaryMaxTime = 10;
+	float boundaryMaxTime = 10f;
 	bool boundaryTimerRunning;
 
 
@@ -62,12 +62,14 @@ public class GameManager : MonoBehaviour
 		{
 			boundaryWarningCountdown = Time.time;
 			boundaryTimerRunning = true;
-			uiManager.SetBoundaryWarning(true);
 			uiManager.UpdateBoundaryWarningCountdown(boundaryMaxTime);
+			uiManager.SetBoundaryWarning(true);
 		}
 		else
 		{
-			boundaryWarningCountdown = 0;
+			//boundaryWarningCountdown = 0;
+			boundaryTimerRunning = false;
+			uiManager.SetBoundaryWarning(false);
 		}
 	}
 
@@ -180,10 +182,11 @@ public class GameManager : MonoBehaviour
 	{
 		if(boundaryTimerRunning)
 		{
-			float timeRemaining = Time.time - boundaryWarningCountdown;
+			float timeRemaining = boundaryMaxTime - (Time.time - boundaryWarningCountdown);
 
-			if (timeRemaining >= boundaryMaxTime)
+			if (timeRemaining <= 0)
 			{
+				Debug.Log("Boundary time exceeded");
 				PlayerShip.instance.Kill();
 			}
 

@@ -208,15 +208,15 @@ public class PlayerShip : MonoBehaviour
 		allowControl = false; //TEMP
 		rb.drag = 0;
 		rb.angularDrag = 0;
+		GameManager.instance.GameOver();
 	}
 
-	
+
 	private void OnCollisionEnter(Collision collision)
 	{
 		if (Vector3.Project(collision.relativeVelocity, collision.GetContact(0).normal).magnitude > minDamageSpeed)
 		{
 			Kill();
-			GameManager.instance.GameOver();
 		}
 	}
 
