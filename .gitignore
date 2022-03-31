@@ -76,3 +76,4 @@ crashlytics-build.properties
 [Aa]ssets/[Mm]odels/
 [Aa]ssets/[Uu]nused [Aa]ssets/
 *.fbx
+*.z7
