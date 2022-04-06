@@ -10,6 +10,11 @@ public class PlayerShip : MonoBehaviour
 	public bool allowControl = true;
 
 	[SerializeField]
+	Camera firstPersonCamera;
+	[SerializeField]
+	Camera thirdPersonCamera;
+
+	[SerializeField]
 	Light cockpitLight;
 
 	[SerializeField]
@@ -28,6 +33,7 @@ public class PlayerShip : MonoBehaviour
 	Vector3 rotationInput;
 
 	bool intertialDampners;
+	bool firstPerson = true;
 	float defaultDrag;
 	float defaultAngularDrag;
 
@@ -51,6 +57,13 @@ public class PlayerShip : MonoBehaviour
 		intertialDampners = true;
 		defaultDrag = rb.drag;
 		defaultAngularDrag = rb.angularDrag;
+		SetCamera();
+	}
+
+	void SetCamera()
+	{
+		firstPersonCamera.gameObject.SetActive(firstPerson);
+		thirdPersonCamera.gameObject.SetActive(!firstPerson);
 	}
 
 	public void SetAllowControl(bool allow)
@@ -168,7 +181,8 @@ public class PlayerShip : MonoBehaviour
 
 				if (Input.GetKeyDown(KeyCode.G))
 				{
-					
+					firstPerson = !firstPerson;
+					SetCamera();
 				}
 
 				if (Input.GetKeyDown(KeyCode.Z))
