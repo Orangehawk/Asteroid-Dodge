@@ -11297,6 +11297,7 @@ GameObject:
   - component: {fileID: 611507241}
   - component: {fileID: 611507240}
   - component: {fileID: 611507239}
+  - component: {fileID: 611507238}
   m_Layer: 0
   m_Name: Mothership
   m_TagString: Untagged
@@ -11304,6 +11305,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
+--- !u!114 &611507238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611507237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7648e4b6772faa643a1afd3c85106360, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectType: 0
+  hostility: 0
 --- !u!65 &611507239
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -41688,6 +41703,41 @@ Transform:
   m_Father: {fileID: 1994243640}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1974749414
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1974749415}
+  m_Layer: 5
+  m_Name: Waypoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1974749415
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974749414}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 439129606233343116}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1976117985
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41997,6 +42047,7 @@ GameObject:
   - component: {fileID: 1986684997}
   - component: {fileID: 1986684996}
   - component: {fileID: 1986685000}
+  - component: {fileID: 1986685001}
   m_Layer: 0
   m_Name: Item
   m_TagString: Untagged
@@ -42093,6 +42144,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e953dc1abdd81584bb65fc5d03ef6762, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1986685001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986684995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7648e4b6772faa643a1afd3c85106360, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectType: 3
+  hostility: 0
 --- !u!1001 &1988849117
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45052,6 +45117,7 @@ RectTransform:
   - {fileID: 1426305039}
   - {fileID: 426606535}
   - {fileID: 587450013}
+  - {fileID: 1974749415}
   m_Father: {fileID: 1561260114938251191}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -45309,7 +45375,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedText: {fileID: 1561260113285502594}
   creditsText: {fileID: 1485777511206681467}
-  livesText: {fileID: 0}
+  livesText: {fileID: 441192627}
   objectiveText: {fileID: 661625749}
   capsuleCollectedImage: {fileID: 587450014}
   boundaryWarningCountdown: {fileID: 1552387233}
@@ -45319,6 +45385,21 @@ MonoBehaviour:
   boundaryWarning: {fileID: 1426305036}
   gameOverMenu: {fileID: 404056155}
   gameWinMenu: {fileID: 501515438}
+  waymarkPool: {fileID: 1974749414}
+  waymarkShip: {fileID: 4119206808452079338, guid: fae8875f0997db746b75e2dab08f46f6, type: 3}
+  waymarkDrone: {fileID: 4314320671515803632, guid: bbfd7eeace2bfe3459720d5f004c25de, type: 3}
+  waymarkAsteroid: {fileID: 8024041330211032292, guid: 125ba3abb55e8ee4ab1bed1e5a4178c9, type: 3}
+  waymarkContainer: {fileID: 4119206808452079338, guid: 90873062b71e3594e900e0db31f9b4fa, type: 3}
+  waymarkObject: {fileID: 4119206808452079338, guid: 3fe71da5ba8b72d4bbe1f8a3446a1790, type: 3}
+  colourFriendly: {r: 0.30588236, g: 1, b: 0.42352942, a: 0.6862745}
+  colourNeutral: {r: 0.9607843, g: 1, b: 0.30588236, a: 0.6862745}
+  colourHostile: {r: 1, g: 0.30588236, b: 0.3647059, a: 0.6862745}
+  colourUnknown: {r: 0.84705883, g: 0.30588236, b: 1, a: 0.6862745}
+  waymarkMinSize: 20
+  waymarkMaxSize: 60
+  waymarkScaleMinDistance: 100
+  waymarkScaleMaxDistance: 1000
+  hideWaymarksBehindObjects: 1
 --- !u!223 &1561260114938251190
 Canvas:
   m_ObjectHideFlags: 0
