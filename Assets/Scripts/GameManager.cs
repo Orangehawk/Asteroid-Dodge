@@ -73,10 +73,18 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public void ItemCollected()
+	public void DepositItem()
+	{
+		playerHasItem = false;
+		uiManager.SetObjectiveText("Continue searching for items, or return to the ship to leave");
+		uiManager.SetItemCollected(false);
+		AddCredits(500);
+	}
+
+	public void SetItemCollected()
 	{
 		playerHasItem = true;
-		uiManager.SetObjectiveText("Return the capsule item to the ship!");
+		uiManager.SetObjectiveText("Return the item to the ship!");
 		uiManager.SetItemCollected(true);
 	}
 

@@ -12,9 +12,9 @@ public class CollectableItem : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if(other.CompareTag("Player"))
+		if(other.CompareTag("Player") && !GameManager.instance.GetItemCollected())
 		{
-			GameManager.instance.ItemCollected();
+			GameManager.instance.SetItemCollected();
 			Destroy(gameObject);
 		}
 	}

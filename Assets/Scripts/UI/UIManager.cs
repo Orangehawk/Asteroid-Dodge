@@ -189,7 +189,7 @@ public class UIManager : MonoBehaviour
 			case IFF.ObjectType.Asteroid:
 				return waymarkAsteroid;
 			case IFF.ObjectType.Container:
-				Debug.LogWarning("No implementation for container in GetIFFWaymark");
+				//Debug.LogWarning("No implementation for container in GetIFFWaymark");
 				return waymarkContainer;
 			default:
 				Debug.LogWarning("No object type set, setting to object");

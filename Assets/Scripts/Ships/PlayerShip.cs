@@ -10,6 +10,9 @@ public class PlayerShip : MonoBehaviour
 	public bool allowControl = true;
 
 	[SerializeField]
+	Light cockpitLight;
+
+	[SerializeField]
 	float moveSpeed = 80;
 	[SerializeField]
 	float boostMultiplier = 1.6f;
@@ -21,7 +24,6 @@ public class PlayerShip : MonoBehaviour
 	float minDamageSpeed = 30f; //Hitting something faster then this will cause damage to your ship
 
 	Rigidbody rb;
-	Light frontLight;
 	Vector3 movementInput;
 	Vector3 rotationInput;
 
@@ -41,7 +43,9 @@ public class PlayerShip : MonoBehaviour
 			instance = this;
 
 		rb = GetComponent<Rigidbody>();
-		frontLight = GetComponentInChildren<Light>();
+
+		if(cockpitLight == null)
+			cockpitLight = GetComponentInChildren<Light>();
 		movementInput = new Vector3();
 		rotationInput = new Vector3();
 		intertialDampners = true;
@@ -154,7 +158,7 @@ public class PlayerShip : MonoBehaviour
 
 				if (Input.GetKeyDown(KeyCode.L))
 				{
-					frontLight.enabled = !frontLight.enabled;
+					cockpitLight.enabled = !cockpitLight.enabled;
 				}
 
 				if (Input.GetKeyDown(KeyCode.T))

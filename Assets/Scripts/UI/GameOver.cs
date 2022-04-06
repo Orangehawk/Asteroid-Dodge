@@ -13,16 +13,4 @@ public class GameOver : MonoBehaviour
 	{
         creditsText.text = $"${GameManager.instance.creditsAmount}";
     }
-
-	// Start is called before the first frame update
-	void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
