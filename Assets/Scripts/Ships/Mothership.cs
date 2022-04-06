@@ -6,6 +6,9 @@ public class Mothership : MonoBehaviour
 {
 	static public Mothership instance;
 
+	[SerializeField]
+
+
 	void Awake()
 	{
 		if (instance != null && instance != this)
@@ -15,16 +18,5 @@ public class Mothership : MonoBehaviour
 		}
 		else
 			instance = this;
-	}
-
-	void OnTriggerEnter(Collider other)
-	{
-		if(other.CompareTag("Player"))
-		{
-			if(GameManager.instance.GetItemCollected())
-			{
-				GameManager.instance.GameWin();
-			}
-		}
 	}
 }
