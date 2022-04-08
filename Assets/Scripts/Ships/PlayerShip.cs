@@ -9,10 +9,17 @@ public class PlayerShip : MonoBehaviour
 
 	public bool allowControl = true;
 
+	//[SerializeField]
+	//Camera firstPersonCamera;
+	//[SerializeField]
+	//Camera smoothRotationCamera;
+	//[SerializeField]
+	//Camera chaseCamera;
+	//[SerializeField]
+	//Camera orbitCamera;
+
 	[SerializeField]
-	Camera firstPersonCamera;
-	[SerializeField]
-	Camera thirdPersonCamera;
+	Camera[] cameras;
 
 	[SerializeField]
 	Light cockpitLight;
@@ -33,7 +40,8 @@ public class PlayerShip : MonoBehaviour
 	Vector3 rotationInput;
 
 	bool intertialDampners;
-	bool firstPerson = true;
+	//bool firstPerson = true;
+	int activeCamera = 0;
 	float defaultDrag;
 	float defaultAngularDrag;
 
@@ -57,13 +65,27 @@ public class PlayerShip : MonoBehaviour
 		intertialDampners = true;
 		defaultDrag = rb.drag;
 		defaultAngularDrag = rb.angularDrag;
-		SetCamera();
+		SetCamera(activeCamera);
 	}
 
-	void SetCamera()
+	/// <summary>
+	/// Sets the active camera to the camera specified by the index
+	/// </summary>
+	/// <param name="cameraNum">The index of the camera to swap to, will swap to camera 0 if invalid</param>
+	void SetCamera(int cameraNum)
 	{
-		firstPersonCamera.gameObject.SetActive(firstPerson);
-		thirdPersonCamera.gameObject.SetActive(!firstPerson);
+		if(cameraNum < cameras.Length)
+		{
+			cameras[cameraNum].gameObject.SetActive(true);
+		}
+
+		for(int i = 0; i < cameras.Length; i++)
+		{
+			if(i != cameraNum)
+			{
+				cameras[i].gameObject.SetActive(false);
+			}
+		}
 	}
 
 	public void SetAllowControl(bool allow)
@@ -181,8 +203,12 @@ public class PlayerShip : MonoBehaviour
 
 				if (Input.GetKeyDown(KeyCode.G))
 				{
-					firstPerson = !firstPerson;
-					SetCamera();
+					activeCamera++;
+
+					if (activeCamera >= cameras.Length)
+						activeCamera = 0;
+
+					SetCamera(activeCamera);
 				}
 
 				if (Input.GetKeyDown(KeyCode.Z))
