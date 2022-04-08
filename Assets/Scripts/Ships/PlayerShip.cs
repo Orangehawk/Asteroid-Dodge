@@ -17,9 +17,9 @@ public class PlayerShip : MonoBehaviour
 	[SerializeField]
 	float boostMultiplier = 1.6f;
 	[SerializeField]
-	float turnSpeed = 80;
+	float turnSpeed = 80; //4000
 	[SerializeField]
-	float rollSpeed = 10.0f;
+	float rollSpeed = 10.0f; //1000
 	[SerializeField]
 	float minDamageSpeed = 30f; //Hitting something faster then this will cause damage to your ship
 
