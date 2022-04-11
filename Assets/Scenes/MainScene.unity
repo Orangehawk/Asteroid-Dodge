@@ -9970,6 +9970,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creditsText: {fileID: 781071691}
+  livesText: {fileID: 0}
 --- !u!114 &404056157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12326,6 +12327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creditsText: {fileID: 2003461274}
+  livesText: {fileID: 0}
 --- !u!114 &501515443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15248,8 +15250,6 @@ GameObject:
   - component: {fileID: 618816937}
   - component: {fileID: 618816941}
   - component: {fileID: 618816940}
-  - component: {fileID: 618816939}
-  - component: {fileID: 618816938}
   m_Layer: 0
   m_Name: Game Over Menu
   m_TagString: Untagged
@@ -15281,30 +15281,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 500, y: 401.29}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &618816938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 618816936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: beac29574c0f73342bc366437bb48436, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &618816939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 618816936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d5e2e59d3a56554a8574168334b9502, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &618816940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22877,7 +22853,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &983773267
 RectTransform:
   m_ObjectHideFlags: 0

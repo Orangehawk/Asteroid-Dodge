@@ -428,6 +428,16 @@ public class UIManager : MonoBehaviour
 		boundaryWarningCountdown.text = $"Return to the mission area: {countdown}";
 	}
 
+	public void UpdateCredits(float credits)
+	{
+		creditsText.text = $"${Math.Round(credits)}";
+	}
+
+	public void UpdateLives(int lives)
+	{
+		livesText.text = $"Lives: {lives}";
+	}
+
 	public void GameWin()
 	{
 		playerUI.SetActive(false);
@@ -444,13 +454,12 @@ public class UIManager : MonoBehaviour
 	void Update()
 	{
 		speedText.text = Math.Round(rb.velocity.magnitude, 2).ToString() + " m/s";
-		creditsText.text = $"${Math.Round(gameManager.creditsAmount)}";
 
 		for (int i = 0; i < targets.Count; i++)
 		{
 			if (UpdateWaymark(targets[i], true) == false)
 			{
-				Debug.LogWarning("Lost target, removing");
+				Logger.Log("Lost target, removing", LogLevel.WARNING);
 				RemoveTarget(targets[i--]); //Remove target and decrement i
 			}
 		}

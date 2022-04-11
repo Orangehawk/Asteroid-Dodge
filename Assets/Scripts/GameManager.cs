@@ -19,22 +19,18 @@ public class GameManager : MonoBehaviour
 		GameOver
 	}
 
-	public float creditsAmount { get; private set; }
-	public float dronesAmount { get; private set; }
+	float creditsAmount;
 
 	GameState gameState;
 	UIManager uiManager;
 	bool playerHasItem;
-	float boundaryWarningCountdown;
-	float boundaryMaxTime = 10f;
-	bool boundaryTimerRunning;
-
+	
 
 	void Awake()
 	{
 		if (instance != null && instance != this)
 		{
-			Debug.LogError("GameManager instance already exists!");
+			Logger.Log("GameManager instance already exists!", LogLevel.ERROR);
 			Destroy(this);
 		}
 		else
@@ -53,24 +49,23 @@ public class GameManager : MonoBehaviour
 		uiManager = UIManager.instance;
 		SetGameState(GameState.Paused);
 		uiManager.SetObjectiveText("Find the capsule item!");
-		boundaryWarningCountdown = 0;
 	}
 
-	public void SetBoundaryCountdown(bool active)
+	public static void DebugToggleFrameRate()
 	{
-		if(active)
+		if (Application.targetFrameRate == 60)
 		{
-			boundaryWarningCountdown = Time.time;
-			boundaryTimerRunning = true;
-			uiManager.UpdateBoundaryWarningCountdown(boundaryMaxTime);
-			uiManager.SetBoundaryWarning(true);
+			Application.targetFrameRate = 144;
 		}
 		else
 		{
-			//boundaryWarningCountdown = 0;
-			boundaryTimerRunning = false;
-			uiManager.SetBoundaryWarning(false);
+			Application.targetFrameRate = 60;
 		}
+	}
+
+	public float GetCredits()
+	{
+		return creditsAmount;
 	}
 
 	public void DepositItem()
@@ -91,6 +86,12 @@ public class GameManager : MonoBehaviour
 	public bool GetItemCollected()
 	{
 		return playerHasItem;
+	}
+
+	public void NewGame()
+	{
+		LevelManager.instance.LoadLevel(0);
+		SetCredits(0);
 	}
 
 	public void GameWin()
@@ -116,28 +117,28 @@ public class GameManager : MonoBehaviour
 					uiManager.SetPauseMenu(false);
 				Time.timeScale = 1;
 				Cursor.lockState = CursorLockMode.Locked;
-				Debug.Log($"Setting gamestate to {gameState}");
+				Logger.Log($"Setting gamestate to {gameState}");
 				break;
 			case GameState.Paused:
 				if (uiManager != null)
 					uiManager.SetPauseMenu(true);
 				Time.timeScale = 0;
 				Cursor.lockState = CursorLockMode.None;
-				Debug.Log($"Setting gamestate to {gameState}");
+				Logger.Log($"Setting gamestate to {gameState}");
 				break;
 			case GameState.Menu:
 				if (uiManager != null)
 					uiManager.SetPauseMenu(false);
 				Time.timeScale = 1;
 				Cursor.lockState = CursorLockMode.None;
-				Debug.Log($"Setting gamestate to {gameState}");
+				Logger.Log($"Setting gamestate to {gameState}");
 				break;
 			case GameState.GameOver:
 				if (uiManager != null)
 					uiManager.SetPauseMenu(false);
 				Time.timeScale = 0;
 				Cursor.lockState = CursorLockMode.None;
-				Debug.Log($"Setting gamestate to {gameState}");
+				Logger.Log($"Setting gamestate to {gameState}");
 				break;
 		}
 	}
@@ -167,18 +168,25 @@ public class GameManager : MonoBehaviour
 			}
 			else
 			{
-				Debug.LogWarning("Tried to pause but game is not playing/paused!");
+				Logger.Log("Tried to pause but game is not playing/paused!", LogLevel.WARNING);
 			}
 		}
 		else
 		{
-			Debug.LogWarning("Tried to pause but game is over!");
+			Logger.Log("Tried to pause but game is over!", LogLevel.WARNING);
 		}
+	}
+
+	public void SetCredits(float amount)
+	{
+		creditsAmount = amount;
+		uiManager.UpdateCredits(creditsAmount);
 	}
 
 	public void AddCredits(float amount)
 	{
 		creditsAmount += amount;
+		uiManager.UpdateCredits(creditsAmount);
 	}
 
 	public void ExitGame()
@@ -188,17 +196,6 @@ public class GameManager : MonoBehaviour
 
 	void Update()
 	{
-		if(boundaryTimerRunning)
-		{
-			float timeRemaining = boundaryMaxTime - (Time.time - boundaryWarningCountdown);
-
-			if (timeRemaining <= 0)
-			{
-				Debug.Log("Boundary time exceeded");
-				PlayerShip.instance.Kill();
-			}
-
-			uiManager.UpdateBoundaryWarningCountdown(timeRemaining);
-		}
+		
 	}
 }
