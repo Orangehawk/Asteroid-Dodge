@@ -60,7 +60,10 @@ public class UIManager : MonoBehaviour
 	Image capsuleCollectedImage;
 	[SerializeField]
 	Text boundaryWarningCountdown;
-
+	[SerializeField]
+	Text respawnCountdown;
+	[SerializeField]
+	Text causeOfDeath;
 
 	[SerializeField]
 	GameObject playerUI;
@@ -70,6 +73,8 @@ public class UIManager : MonoBehaviour
 	GameObject pauseMenu;
 	[SerializeField]
 	GameObject boundaryWarning;
+	[SerializeField]
+	GameObject respawnScreen;
 
 	[SerializeField]
 	GameObject gameOverMenu;
@@ -117,6 +122,7 @@ public class UIManager : MonoBehaviour
 	List<Target> targets;
 	List<GameObject> menus;
 	float waymarkScaleSlope;
+	float respawnTime;
 
 
 	private void OnValidate()
@@ -149,7 +155,7 @@ public class UIManager : MonoBehaviour
 		}
 		else
 		{
-			Debug.LogWarning("UIManager: Player is null!");
+			Logger.Log("UIManager: Player is null!", LogLevel.WARNING);
 		}
 
 		if (mothership != null)
@@ -158,7 +164,7 @@ public class UIManager : MonoBehaviour
 		}
 		else
 		{
-			Debug.LogWarning("UIManager: Mothership is null!");
+			Logger.Log("UIManager: Mothership is null!", LogLevel.WARNING);
 		}
 
 		waymarkScaleSlope = (waymarkMinSize - waymarkMaxSize) / (waymarkScaleMaxDistance - waymarkScaleMinDistance);
@@ -438,6 +444,21 @@ public class UIManager : MonoBehaviour
 		livesText.text = $"Lives: {lives}";
 	}
 
+	IEnumerator RespawnScreenCoroutine(float seconds)
+	{
+		respawnScreen.SetActive(true);
+		yield return new WaitForSeconds(seconds);
+		respawnScreen.SetActive(false);
+	}
+
+	public void DisplayRespawnScreen(float seconds, string cause = "")
+	{
+		IEnumerator coroutine = RespawnScreenCoroutine(seconds);
+		StartCoroutine(coroutine);
+		respawnTime = Time.time + seconds;
+		causeOfDeath.text = $"Cause of death: {cause}";
+	}
+
 	public void GameWin()
 	{
 		playerUI.SetActive(false);
@@ -454,6 +475,11 @@ public class UIManager : MonoBehaviour
 	void Update()
 	{
 		speedText.text = Math.Round(rb.velocity.magnitude, 2).ToString() + " m/s";
+
+		if(respawnScreen.activeSelf)
+		{
+			respawnCountdown.text = $"Respawning to mothership in {Math.Round(respawnTime - Time.time, 2)} seconds...";
+		}
 
 		for (int i = 0; i < targets.Count; i++)
 		{

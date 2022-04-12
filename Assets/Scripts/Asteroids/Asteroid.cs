@@ -17,13 +17,13 @@ public class Asteroid : MonoBehaviour
 	{
 		if (!exploding)
 		{
-			GameObject g = Instantiate(explosionParticles, gameObject.transform.position, gameObject.transform.rotation);
-			g.transform.localScale = gameObject.transform.localScale / 2;
-			g.GetComponent<ParticleSystem>().Play();
+			//GameObject g = Instantiate(explosionParticles, gameObject.transform.position, gameObject.transform.rotation);
+			//g.transform.localScale = gameObject.transform.localScale / 2;
+			//g.GetComponent<ParticleSystem>().Play();
 			gameObject.GetComponent<MeshRenderer>().enabled = false;
 			gameObject.GetComponent<Collider>().enabled = false;
 			exploding = true;
-			Destroy(g, g.GetComponent<ParticleSystem>().main.duration);
+			//Destroy(g, g.GetComponent<ParticleSystem>().main.duration);
 			Destroy(gameObject);
 		}
 	}

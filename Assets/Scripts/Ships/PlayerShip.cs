@@ -27,6 +27,7 @@ public class PlayerShip : MonoBehaviour
 	float defaultDrag;
 	float defaultAngularDrag;
 	int lives = 3;
+	string causeOfDeath = "";
 
 
 	void Awake()
@@ -56,6 +57,20 @@ public class PlayerShip : MonoBehaviour
 	public void SetAllowControl(bool allow)
 	{
 		allowControl = allow;
+	}
+
+	IEnumerator PauseControlCoroutine(float seconds)
+	{
+		SetAllowControl(false);
+		yield return new WaitForSeconds(seconds);
+		SetAllowControl(true);
+	}
+
+	public void PauseControl(float seconds)
+	{
+		UIManager.instance.DisplayRespawnScreen(seconds, causeOfDeath);
+		IEnumerator coroutine = PauseControlCoroutine(seconds);
+		StartCoroutine(coroutine);
 	}
 
 	public void ToggleAllowControl()
@@ -149,6 +164,12 @@ public class PlayerShip : MonoBehaviour
 					Logger.Log($"Set target framerate to {Application.targetFrameRate}");
 				}
 
+				//DEBUG Kill the player immediately
+				if(Input.GetKeyDown(KeyCode.K))
+				{
+					Kill();
+				}
+
 				//DEBUG? disable drag/speed limiter
 				if (Input.GetKeyDown(KeyCode.Z))
 				{
@@ -193,9 +214,10 @@ public class PlayerShip : MonoBehaviour
 
 	public void Respawn()
 	{
-		SetAllowControl(true);
 		transform.position = Vector3.zero;
+		transform.rotation = Quaternion.identity;
 		rb.Sleep();
+		PauseControl(5);
 	}
 
 	public void Kill()
@@ -216,6 +238,8 @@ public class PlayerShip : MonoBehaviour
 	{
 		if (Vector3.Project(collision.relativeVelocity, collision.GetContact(0).normal).magnitude > minDamageSpeed)
 		{
+			causeOfDeath = $"Hit {collision.gameObject.tag} too hard";
+
 			Kill();
 		}
 	}
