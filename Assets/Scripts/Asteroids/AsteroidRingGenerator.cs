@@ -4,87 +4,85 @@ using UnityEngine;
 
 public class AsteroidRingGenerator : MonoBehaviour
 {
-	public int numberOfAsteroids;
-	public int seed;
-	public GameObject[] asteroidPrefabs;
+	[SerializeField]
+	int numberOfAsteroids;
+	[SerializeField]
+	int seed;
+	[SerializeField]
+	GameObject[] asteroidPrefabs;
 
-	public Vector3 areaRadius;
-	public Vector3 safeAreaRadius;
+	[SerializeField]
+	Vector3 initialMinVelocity;
+	[SerializeField]
+	Vector3 initialMaxVelocity;
 
-	//public float rotationSpeedMult;
-	public float asteroidMinRotationSpeed = 0.5f;
-	public float asteroidMaxRotationSpeed = 10f;
+	[SerializeField]
+	float asteroidMinRotationSpeed = 0.5f;
+	[SerializeField]
+	float asteroidMaxRotationSpeed = 10f;
 
-	public float asteroidMinSize = 1f;
-	public float asteroidMaxSize = 10f;
+	[SerializeField]
+	float ringRadius = 1;
+	[SerializeField]
+	float ringHeight = 1;
+	[SerializeField]
+	float maxRingThickness;
 
-	public float overlapTolerance = 0f;
+	[SerializeField]
+	float asteroidMinSize = 1f;
+	[SerializeField]
+	float asteroidMaxSize = 10f;
+
+	[SerializeField]
+	float overlapTolerance = 0f;
+
+	[SerializeField]
+	bool enableOnValidate = false;
 
 	static GameObject asteroidPool;
 
 
-	 void Awake()
+	void Awake()
 	{
 		if (asteroidPool == null)
 		{
-			asteroidPool = new GameObject("Asteroid Field");
+			asteroidPool = new GameObject("Asteroid Ring");
 		}
 	}
 
-	public void Generate2DAsteroidField(int NumObjects, GameObject[] asteroids, Vector3 areaRadius, Vector3 safeRadius)
+	private void OnValidate()
 	{
-		//Debug.Log("Generating 2D asteroid field");
-
-		Vector3 pos;
-
-		for (int i = 0; i < NumObjects; i++)
+		if (enableOnValidate)
 		{
-			do
-			{
-				pos = new Vector3(Random.Range(-areaRadius.x, areaRadius.x), 1f, Random.Range(-areaRadius.z, areaRadius.z));
-			} while ((pos.x > safeRadius.x && pos.x < -safeRadius.x) || (pos.y > safeRadius.z && pos.y < -safeRadius.z));
-
-			Quaternion rot = Random.rotation;
-			GameObject currAsteroid = Instantiate(asteroids[Random.Range(0, asteroids.Length - 1)], pos, rot, asteroidPool.transform);
-
-			Rigidbody rb = currAsteroid.GetComponent<Rigidbody>();
-			float rotationSpeedMult = rb.mass;
-
-			float min = asteroidMinRotationSpeed;
-			float max = asteroidMaxRotationSpeed;
-
-			if (rotationSpeedMult != 0)
-			{
-				min *= rotationSpeedMult;
-				max *= rotationSpeedMult;
-			}
-
-			//if (Random.value > 0.2f)
-			//{
-			currAsteroid.GetComponent<Rigidbody>().AddTorque(Random.Range(min, max), Random.Range(min, max), Random.Range(min, max));
-			//}
+			DeleteRing();
+			GenerateDynamic3DAsteroidRing(numberOfAsteroids, asteroidPrefabs, ringRadius, ringHeight, maxRingThickness);
 		}
 	}
 
-	public void Generate3DAsteroidField(int NumObjects, GameObject[] asteroids, Vector3 areaRadius, Vector3 safeRadius)
+	void DeleteRing()
 	{
-		Debug.Log("Generating 3D asteroid field");
+		foreach(Transform child in asteroidPool.transform)
+		{
+			Destroy(child.gameObject);
+		}
+	}
+
+	void  GenerateDynamic3DAsteroidRing(int numObjects, GameObject[] asteroids, float radius, float height, float maxThickness)
+	{
+		Logger.Log("Generating dynamic 3D asteroid ring");
 
 		int skips = 0; //Amount of times an overlap has caused a skip
 		int maxSkips = 50; //How many times we can skip instantiating before breaking the loop
 
-		for (int i = 0; i < NumObjects; i++)
+		for (int i = 0; i < numObjects; i++)
 		{
 			Vector3 pos;
 			Quaternion rot;
 			float scale;
 
-
-			//Find a position that is not within the safe radius
-			do
-			{
-				pos = new Vector3(Random.Range(-areaRadius.x, areaRadius.x), Random.Range(-areaRadius.y, areaRadius.y), Random.Range(-areaRadius.z, areaRadius.z));
-			} while ((pos.x > safeRadius.x && pos.x < -safeRadius.x) || (pos.y > safeRadius.y && pos.y < -safeRadius.y) || (pos.z > safeRadius.z && pos.z < -safeRadius.z));
+			float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+			pos = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * (radius + Random.Range(0, maxThickness));
+			pos.y = Random.Range(-height, height);
 
 			rot = Random.rotation; //Create a random starting rotation
 
@@ -98,10 +96,7 @@ public class AsteroidRingGenerator : MonoBehaviour
 				GameObject currAsteroid = Instantiate(asteroids[Random.Range(0, asteroids.Length)], pos, rot, asteroidPool.transform); //Instantiate 
 				currAsteroid.transform.localScale = new Vector3(scale, scale, scale); //Scale the asteroid
 
-				//currAsteroid.GetComponent<Asteroid>().UpdateMass(); //Update the rigidbody mass of the asteroid
-				//Rigidbody rb = currAsteroid.GetComponent<Rigidbody>(); //Get the rigidbody
-				RandomSpin rs = currAsteroid.GetComponent<RandomSpin>();
-				//float rotationSpeedMult = rb.mass; //Set the rotation speed multiplied based on the rigidbody mass
+				Rigidbody rb = currAsteroid.GetComponent<Rigidbody>();
 				float rotationSpeedMult = 0; //Set the rotation speed multiplied based on the rigidbody mass
 
 				float min = asteroidMinRotationSpeed;
@@ -113,154 +108,32 @@ public class AsteroidRingGenerator : MonoBehaviour
 					max *= rotationSpeedMult;
 				}
 
-				rs.SetRotationSpeed(Random.Range(min, max));
+				Vector3 rotationAxis = new Vector3(Random.value, Random.value, Random.value);
 
-				//if (Random.value > 0.2f)
-				//{
-				//currAsteroid.GetComponent<Rigidbody>().AddTorque(Random.Range(min, max), Random.Range(min, max), Random.Range(min, max)); //Add a random rotation to the asteroid
+				//Ensure all 3 components add up to 1
+				float div = rotationAxis.x + rotationAxis.y + rotationAxis.z - 1;
+				div /= 3;
+
+				if (div > 0)
+				{
+					rotationAxis.x -= div;
+					rotationAxis.y -= div;
+					rotationAxis.z -= div;
+				}
+
+				//Spin the asteroid
+				rb.AddTorque(rotationAxis * Random.Range(min, max), ForceMode.Impulse);
+
+				//Add velocity to the asteroid
+				rb.AddForce(Random.Range(initialMinVelocity.x, initialMaxVelocity.x), Random.Range(initialMinVelocity.y, initialMaxVelocity.y), Random.Range(initialMinVelocity.z, initialMaxVelocity.z), ForceMode.VelocityChange);
 			}
 			else
 			{
-				//Debug.Log("Found overlap, skipping");
+				//Logger.Log("Found overlap, skipping");
 				i--;
 				if (skips++ > maxSkips)
 				{
-					Debug.Log("Too many skips, aborting asteroid field generation");
-					break;
-				}
-			}
-
-		}
-	}
-
-	public void Generate2DAsteroidRing(int NumObjects, GameObject[] asteroids, float areaRadius, float safeRadius)
-	{
-		Debug.Log("Generating 2D asteroid ring");
-
-		int skips = 0; //Amount of times an overlap has caused a skip
-		int maxSkips = 50; //How many times we can skip instantiating before breaking the loop
-
-		for (int i = 0; i < NumObjects; i++)
-		{
-			Vector3 pos;
-			Quaternion rot;
-			float scale;
-
-
-			//Find a position that is not within the safe radius
-			do
-			{
-				pos = Random.insideUnitCircle * areaRadius;
-				//pos = new Vector3(Random.Range(-areaRadius.x, areaRadius.x), Random.Range(-areaRadius.y, areaRadius.y), Random.Range(-areaRadius.z, areaRadius.z));
-			} while ((pos.x > safeRadius && pos.x < -safeRadius) || (pos.y > safeRadius && pos.y < -safeRadius) || (pos.z > safeRadius && pos.z < -safeRadius));
-
-			rot = Random.rotation; //Create a random starting rotation
-
-			asteroidMinSize = asteroidMinSize > 0 ? asteroidMinSize : 1; //Clamp min size to 1 or above
-			asteroidMaxSize = asteroidMaxSize > 0 ? asteroidMaxSize : 1; //Clamp max size to 1 or above
-
-			scale = Random.Range(asteroidMinSize, asteroidMaxSize); //Create a random scale
-
-			if (Physics.OverlapSphere(pos, scale + overlapTolerance, ~0, QueryTriggerInteraction.Ignore).Length == 0)
-			{
-				GameObject currAsteroid = Instantiate(asteroids[Random.Range(0, asteroids.Length)], pos, rot, asteroidPool.transform); //Instantiate 
-				currAsteroid.transform.localScale = new Vector3(scale, scale, scale); //Scale the asteroid
-
-				//currAsteroid.GetComponent<Asteroid>().UpdateMass(); //Update the rigidbody mass of the asteroid
-				//Rigidbody rb = currAsteroid.GetComponent<Rigidbody>(); //Get the rigidbody
-				RandomSpin rs = currAsteroid.GetComponent<RandomSpin>();
-				//float rotationSpeedMult = rb.mass; //Set the rotation speed multiplied based on the rigidbody mass
-				float rotationSpeedMult = 0; //Set the rotation speed multiplied based on the rigidbody mass
-
-				float min = asteroidMinRotationSpeed;
-				float max = asteroidMaxRotationSpeed;
-
-				if (rotationSpeedMult != 0) //No support for stopping rotation via multiplier
-				{
-					min *= rotationSpeedMult;
-					max *= rotationSpeedMult;
-				}
-
-				rs.SetRotationSpeed(Random.Range(min, max));
-
-				//if (Random.value > 0.2f)
-				//{
-				//currAsteroid.GetComponent<Rigidbody>().AddTorque(Random.Range(min, max), Random.Range(min, max), Random.Range(min, max)); //Add a random rotation to the asteroid
-			}
-			else
-			{
-				//Debug.Log("Found overlap, skipping");
-				i--;
-				if (skips++ > maxSkips)
-				{
-					Debug.Log("Too many skips, aborting asteroid field generation");
-					break;
-				}
-			}
-
-		}
-	}
-
-	public void Generate3DAsteroidRing(int NumObjects, GameObject[] asteroids, Vector3 areaRadius, Vector3 safeRadius)
-	{
-		Debug.Log("Generating 3D asteroid field");
-
-		int skips = 0; //Amount of times an overlap has caused a skip
-		int maxSkips = 50; //How many times we can skip instantiating before breaking the loop
-
-		for (int i = 0; i < NumObjects; i++)
-		{
-			Vector3 pos;
-			Quaternion rot;
-			float scale;
-
-
-			//Find a position that is not within the safe radius
-			do
-			{
-				pos = new Vector3(Random.Range(-areaRadius.x, areaRadius.x), Random.Range(-areaRadius.y, areaRadius.y), Random.Range(-areaRadius.z, areaRadius.z));
-			} while ((pos.x > safeRadius.x && pos.x < -safeRadius.x) || (pos.y > safeRadius.y && pos.y < -safeRadius.y) || (pos.z > safeRadius.z && pos.z < -safeRadius.z));
-
-			rot = Random.rotation; //Create a random starting rotation
-
-			asteroidMinSize = asteroidMinSize > 0 ? asteroidMinSize : 1; //Clamp min size to 1 or above
-			asteroidMaxSize = asteroidMaxSize > 0 ? asteroidMaxSize : 1; //Clamp max size to 1 or above
-
-			scale = Random.Range(asteroidMinSize, asteroidMaxSize); //Create a random scale
-
-			if (Physics.OverlapSphere(pos, scale + overlapTolerance, ~0, QueryTriggerInteraction.Ignore).Length == 0)
-			{
-				GameObject currAsteroid = Instantiate(asteroids[Random.Range(0, asteroids.Length)], pos, rot, asteroidPool.transform); //Instantiate 
-				currAsteroid.transform.localScale = new Vector3(scale, scale, scale); //Scale the asteroid
-
-				//currAsteroid.GetComponent<Asteroid>().UpdateMass(); //Update the rigidbody mass of the asteroid
-				//Rigidbody rb = currAsteroid.GetComponent<Rigidbody>(); //Get the rigidbody
-				RandomSpin rs = currAsteroid.GetComponent<RandomSpin>();
-				//float rotationSpeedMult = rb.mass; //Set the rotation speed multiplied based on the rigidbody mass
-				float rotationSpeedMult = 0; //Set the rotation speed multiplied based on the rigidbody mass
-
-				float min = asteroidMinRotationSpeed;
-				float max = asteroidMaxRotationSpeed;
-
-				if (rotationSpeedMult != 0) //No support for stopping rotation via multiplier
-				{
-					min *= rotationSpeedMult;
-					max *= rotationSpeedMult;
-				}
-
-				rs.SetRotationSpeed(Random.Range(min, max));
-
-				//if (Random.value > 0.2f)
-				//{
-				//currAsteroid.GetComponent<Rigidbody>().AddTorque(Random.Range(min, max), Random.Range(min, max), Random.Range(min, max)); //Add a random rotation to the asteroid
-			}
-			else
-			{
-				//Debug.Log("Found overlap, skipping");
-				i--;
-				if (skips++ > maxSkips)
-				{
-					Debug.Log("Too many skips, aborting asteroid field generation");
+					Logger.Log($"Too many skips, aborting asteroid field generation. Total asteroids generated: {i}/{numObjects}");
 					break;
 				}
 			}
@@ -272,25 +145,26 @@ public class AsteroidRingGenerator : MonoBehaviour
 	{
 		Random.InitState(seed);
 
-		//areaRadius = WorldConstants.WORLD_SIZE;
-		//safeAreaRadius = WorldConstants.SAFE_AREA_SIZE_ASTEROIDS;
-		if (asteroidPool == null)
-			asteroidPool = new GameObject("Asteroids");
-
-		if (areaRadius.magnitude > 0 && safeAreaRadius.magnitude >= 0 && (areaRadius.magnitude > safeAreaRadius.magnitude))
+		if (numberOfAsteroids > 0 && ringRadius > 0)
 		{
-			if (areaRadius.y >= -1 && areaRadius.y <= 1)
-			{
-				Generate2DAsteroidField(numberOfAsteroids, asteroidPrefabs, areaRadius, safeAreaRadius);
-			}
-			else
-			{
-				Generate3DAsteroidField(numberOfAsteroids, asteroidPrefabs, areaRadius, safeAreaRadius);
-			}
+			GenerateDynamic3DAsteroidRing(numberOfAsteroids, asteroidPrefabs, ringRadius, ringHeight, maxRingThickness);
 		}
 		else
 		{
-			Debug.Log("Failed to create asteroid field, invalid values for generation");
+			Debug.LogError("Failed to create asteroid ring, invalid values for generation");
+		}
+	}
+
+	void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Home))
+		{
+			GenerateDynamic3DAsteroidRing(numberOfAsteroids, asteroidPrefabs, ringRadius, ringHeight, maxRingThickness);
+		}
+
+		if (Input.GetKeyDown(KeyCode.End))
+		{
+			DeleteRing();
 		}
 	}
 }

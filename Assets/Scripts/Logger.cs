@@ -55,7 +55,6 @@ public static class Logger// : MonoBehaviour
 		logToFile = active;
 	}
 
-	[System.Diagnostics.Conditional("ENABLE_LOGS")]
 	public static void Log(string input, LogLevel logLevel = LogLevel.DEBUG)
 	{
 		if (!logToFile)

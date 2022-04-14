@@ -25,8 +25,6 @@ public class SaveData
 
 public class SaveManager : MonoBehaviour
 {
-
-
 	public static SaveManager instance;
 
 	List<SaveData> saveData;
