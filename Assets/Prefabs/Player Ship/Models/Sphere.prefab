@@ -43,10 +43,10 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 42.17
+  m_Intensity: 20
   m_Range: 10
-  m_SpotAngle: 51.7
-  m_InnerSpotAngle: 21.80208
+  m_SpotAngle: 101.14132
+  m_InnerSpotAngle: 71.243385
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
@@ -85,7 +85,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -136,7 +136,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 20
+  m_Intensity: 1
   m_Range: 0.5
   m_SpotAngle: 100
   m_InnerSpotAngle: 1
@@ -178,7 +178,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -5194,10 +5194,10 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 42.17
+  m_Intensity: 20
   m_Range: 10
-  m_SpotAngle: 51.7
-  m_InnerSpotAngle: 21.80208
+  m_SpotAngle: 101.14132
+  m_InnerSpotAngle: 71.243385
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
@@ -5236,7 +5236,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -5380,7 +5380,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 20
+  m_Intensity: 1
   m_Range: 0.5
   m_SpotAngle: 100
   m_InnerSpotAngle: 1
@@ -5422,7 +5422,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -5615,7 +5615,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &1743901782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5628,8 +5628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307c86a73a354f74dbeefffeead04bc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowControl: 1
-  cockpitLight: {fileID: 1315829812}
   moveSpeed: 80
   boostMultiplier: 1.6
   turnSpeed: 4000
@@ -5650,7 +5648,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8473449673612237097
 Transform:
   m_ObjectHideFlags: 0

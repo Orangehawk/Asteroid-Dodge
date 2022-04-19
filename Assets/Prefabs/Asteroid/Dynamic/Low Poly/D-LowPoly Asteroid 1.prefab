@@ -15,10 +15,8 @@ GameObject:
   - component: {fileID: 4400570040235896073}
   - component: {fileID: -4227368051839564702}
   - component: {fileID: 1685521640527233065}
-  - component: {fileID: 3446373399937479148}
-  - component: {fileID: 4324193813905873286}
   m_Layer: 0
-  m_Name: D-Hinge-Asteroid
+  m_Name: D-LowPoly Asteroid 1
   m_TagString: Asteroid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +43,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5640990943001019759}
-  m_Mesh: {fileID: 4805233316047723526, guid: 34d7d6681fd8a24458ffa990537a1464, type: 3}
+  m_Mesh: {fileID: 4805233316047723526, guid: c9ccb6e9160fbf0498528082c7ea3930, type: 3}
 --- !u!23 &6145213438058177722
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -144,54 +142,4 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 2
---- !u!59 &3446373399937479148
-HingeJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5640990943001019759}
-  m_ConnectedBody: {fileID: 0}
-  m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0, z: 0}
-  m_Axis: {x: 0, y: 1, z: 0}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
-  m_UseSpring: 0
-  m_Spring:
-    spring: 0
-    damper: 0
-    targetPosition: 0
-  m_UseMotor: 0
-  m_Motor:
-    targetVelocity: 0
-    force: 0
-    freeSpin: 0
-  m_UseLimits: 0
-  m_Limits:
-    min: 0
-    max: 0
-    bounciness: 0
-    bounceMinVelocity: 0.2
-    contactDistance: 0
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
---- !u!114 &4324193813905873286
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5640990943001019759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 607c8aea163a148499bbf96158344fc8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  anchor: {x: 0, y: 0, z: 0}
-  axis: {x: 0, y: 1, z: 0}
+  m_CollisionDetection: 0
