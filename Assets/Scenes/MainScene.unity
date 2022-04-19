@@ -51222,6 +51222,62 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1107065475}
     m_Modifications:
+    - target: {fileID: 602465703, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_Intensity
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 602465703, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_SpotAngle
+      value: 101.14132
+      objectReference: {fileID: 0}
+    - target: {fileID: 602465703, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_InnerSpotAngle
+      value: 71.243385
+      objectReference: {fileID: 0}
+    - target: {fileID: 602465703, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 602465703, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_Shadows.m_Strength
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 739727190, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_Intensity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 739727190, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265729319, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_Intensity
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265729319, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_SpotAngle
+      value: 101.14132
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265729319, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_InnerSpotAngle
+      value: 71.243385
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265729319, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265729319, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_Shadows.m_Strength
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1538021213, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_Intensity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1538021213, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1743901787, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
       propertyPath: m_CollisionDetection
       value: 2
