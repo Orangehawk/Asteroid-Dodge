@@ -3462,6 +3462,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   axis: {x: 0, y: 1, z: 0}
   speed: 0.1
+  useRB: 0
 --- !u!1001 &118584226
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38446,7 +38447,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656656811}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0abfbdf169ee0946b307126b964c3a3, type: 3}
   m_Name: 
@@ -38493,17 +38494,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656656811}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 86e7f929499a3b148b9c82fc75d8c788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfAsteroids: 10000
   seed: 1710
-  asteroidPrefabs:
+  staticAsteroidPrefabs:
+  - {fileID: 5640990943001019759, guid: 555ad5ded02ea9543b484d771caaf4d3, type: 3}
+  dynamicAsteroidPrefabs:
   - {fileID: 5640990943001019759, guid: c30fb36596917b342acebd01b9fbd519, type: 3}
-  initialMinVelocity: {x: 0, y: 0, z: 0}
-  initialMaxVelocity: {x: 0, y: 0, z: 0}
+  dynamic: 1
+  initialMinVelocity: {x: 500, y: 0, z: 0}
+  initialMaxVelocity: {x: 500, y: 0, z: 0}
   asteroidMinRotationSpeed: 0
   asteroidMaxRotationSpeed: 0
   ringRadius: 5000
@@ -38513,6 +38517,7 @@ MonoBehaviour:
   asteroidMaxSize: 50
   overlapTolerance: 40
   enableOnValidate: 0
+  asteroidRingPrefab: {fileID: 0}
 --- !u!1001 &1661631904
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51205,6 +51210,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1107065475}
     m_Modifications:
+    - target: {fileID: 1743901787, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 44211358175650692, guid: ffb885b3bd87d5d42a514c957bc4991d, type: 3}
       propertyPath: m_Name
       value: Player

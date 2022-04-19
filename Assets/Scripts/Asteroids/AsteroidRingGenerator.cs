@@ -9,7 +9,12 @@ public class AsteroidRingGenerator : MonoBehaviour
 	[SerializeField]
 	int seed;
 	[SerializeField]
-	GameObject[] asteroidPrefabs;
+	GameObject[] staticAsteroidPrefabs;
+	[SerializeField]
+	GameObject[] dynamicAsteroidPrefabs;
+
+	[SerializeField]
+	bool dynamic = false;
 
 	[SerializeField]
 	Vector3 initialMinVelocity;
@@ -39,6 +44,9 @@ public class AsteroidRingGenerator : MonoBehaviour
 	[SerializeField]
 	bool enableOnValidate = false;
 
+	[SerializeField]
+	GameObject asteroidRingPrefab;
+
 	static GameObject asteroidPool;
 
 
@@ -46,7 +54,10 @@ public class AsteroidRingGenerator : MonoBehaviour
 	{
 		if (asteroidPool == null)
 		{
-			asteroidPool = new GameObject("Asteroid Ring");
+			if (asteroidRingPrefab == null)
+				asteroidPool = new GameObject("Asteroid Ring");
+			else
+				asteroidPool = Instantiate(asteroidRingPrefab);
 		}
 	}
 
@@ -55,7 +66,7 @@ public class AsteroidRingGenerator : MonoBehaviour
 		if (enableOnValidate)
 		{
 			DeleteRing();
-			GenerateDynamic3DAsteroidRing(numberOfAsteroids, asteroidPrefabs, ringRadius, ringHeight, maxRingThickness);
+			GenerateDynamic3DAsteroidRing(numberOfAsteroids, dynamicAsteroidPrefabs, ringRadius, ringHeight, maxRingThickness);
 		}
 	}
 
@@ -64,6 +75,48 @@ public class AsteroidRingGenerator : MonoBehaviour
 		foreach(Transform child in asteroidPool.transform)
 		{
 			Destroy(child.gameObject);
+		}
+	}
+
+	void GenerateStatic3DAsteroidRing(int numObjects, GameObject[] asteroids, float radius, float height, float maxThickness)
+	{
+		Logger.Log("Generating static 3D asteroid ring");
+
+		int skips = 0; //Amount of times an overlap has caused a skip
+		int maxSkips = 50; //How many times we can skip instantiating before breaking the loop
+
+		for (int i = 0; i < numObjects; i++)
+		{
+			Vector3 pos;
+			Quaternion rot;
+			float scale;
+
+			float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+			pos = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * (radius + Random.Range(0, maxThickness));
+			pos.y = Random.Range(-height, height);
+
+			rot = Random.rotation; //Create a random starting rotation
+
+			asteroidMinSize = asteroidMinSize > 0 ? asteroidMinSize : 1; //Clamp min size to 1 or above
+			asteroidMaxSize = asteroidMaxSize > 0 ? asteroidMaxSize : 1; //Clamp max size to 1 or above
+
+			scale = Random.Range(asteroidMinSize, asteroidMaxSize); //Create a random scale
+
+			if (Physics.OverlapSphere(pos, scale + overlapTolerance, ~0, QueryTriggerInteraction.Ignore).Length == 0)
+			{
+				GameObject currAsteroid = Instantiate(asteroids[Random.Range(0, asteroids.Length)], pos, rot, asteroidPool.transform); //Instantiate 
+				currAsteroid.transform.localScale = new Vector3(scale, scale, scale); //Scale the asteroid
+			}
+			else
+			{
+				i--;
+				if (skips++ > maxSkips)
+				{
+					Logger.Log($"Too many skips, aborting asteroid field generation. Total asteroids generated: {i}/{numObjects}");
+					break;
+				}
+			}
+
 		}
 	}
 
@@ -125,7 +178,7 @@ public class AsteroidRingGenerator : MonoBehaviour
 				rb.AddTorque(rotationAxis * Random.Range(min, max), ForceMode.Impulse);
 
 				//Add velocity to the asteroid
-				rb.AddForce(Random.Range(initialMinVelocity.x, initialMaxVelocity.x), Random.Range(initialMinVelocity.y, initialMaxVelocity.y), Random.Range(initialMinVelocity.z, initialMaxVelocity.z), ForceMode.VelocityChange);
+				rb.AddRelativeForce(Random.Range(initialMinVelocity.x, initialMaxVelocity.x), Random.Range(initialMinVelocity.y, initialMaxVelocity.y), Random.Range(initialMinVelocity.z, initialMaxVelocity.z), ForceMode.VelocityChange);
 			}
 			else
 			{
@@ -147,7 +200,10 @@ public class AsteroidRingGenerator : MonoBehaviour
 
 		if (numberOfAsteroids > 0 && ringRadius > 0)
 		{
-			GenerateDynamic3DAsteroidRing(numberOfAsteroids, asteroidPrefabs, ringRadius, ringHeight, maxRingThickness);
+			if (dynamic)
+				GenerateDynamic3DAsteroidRing(numberOfAsteroids, dynamicAsteroidPrefabs, ringRadius, ringHeight, maxRingThickness);
+			else
+				GenerateStatic3DAsteroidRing(numberOfAsteroids, staticAsteroidPrefabs, ringRadius, ringHeight, maxRingThickness);
 		}
 		else
 		{
@@ -159,7 +215,10 @@ public class AsteroidRingGenerator : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Home))
 		{
-			GenerateDynamic3DAsteroidRing(numberOfAsteroids, asteroidPrefabs, ringRadius, ringHeight, maxRingThickness);
+			if (dynamic)
+				GenerateDynamic3DAsteroidRing(numberOfAsteroids, dynamicAsteroidPrefabs, ringRadius, ringHeight, maxRingThickness);
+			else
+				GenerateStatic3DAsteroidRing(numberOfAsteroids, staticAsteroidPrefabs, ringRadius, ringHeight, maxRingThickness);
 		}
 
 		if (Input.GetKeyDown(KeyCode.End))

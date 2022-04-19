@@ -10,6 +10,7 @@ public class Spin : MonoBehaviour
     float speed = 0.1f;
 
     Rigidbody rb;
+    [SerializeField]
     bool useRB;
 
 
@@ -21,8 +22,8 @@ public class Spin : MonoBehaviour
 	// Start is called before the first frame update
 	void OnEnable()
     {
-        if (useRB)
-            rb.AddTorque(axis * speed, ForceMode.VelocityChange);
+        //if (useRB)
+            //rb.AddTorque(axis * speed, ForceMode.VelocityChange);
     }
 
 	void OnDisable()
@@ -32,9 +33,14 @@ public class Spin : MonoBehaviour
     }
 
 	// Update is called once per frame
-	void Update()
+	void FixedUpdate()
     {
-        if(!useRB)
-            transform.Rotate(axis, speed * Time.deltaTime);
+        if (rb == null)
+            useRB = TryGetComponent(out rb);
+
+        if (!useRB)
+            transform.Rotate(axis, speed * Time.fixedDeltaTime);
+        if (useRB)
+            rb.MoveRotation(rb.rotation * Quaternion.Euler(axis * speed * Time.fixedDeltaTime));
     }
 }
