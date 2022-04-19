@@ -7,10 +7,16 @@ public class GameOver : MonoBehaviour
 {
     [SerializeField]
     Text creditsText;
+    [SerializeField]
+    Text livesText;
 
 
 	void OnEnable()
 	{
-        creditsText.text = $"${GameManager.instance.creditsAmount}";
+        if(creditsText != null)
+            creditsText.text = $"${GameManager.instance.GetCredits()}";
+
+        if (livesText != null)
+            livesText.text = $"{PlayerShip.instance.GetLives()}";
     }
 }

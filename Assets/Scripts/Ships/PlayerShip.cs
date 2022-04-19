@@ -7,19 +7,14 @@ public class PlayerShip : MonoBehaviour
 {
 	static public PlayerShip instance;
 
-	public bool allowControl = true;
-
-	[SerializeField]
-	Light cockpitLight;
-
 	[SerializeField]
 	float moveSpeed = 80;
 	[SerializeField]
 	float boostMultiplier = 1.6f;
 	[SerializeField]
-	float turnSpeed = 80;
+	float turnSpeed = 80; //4000
 	[SerializeField]
-	float rollSpeed = 10.0f;
+	float rollSpeed = 10.0f; //1000
 	[SerializeField]
 	float minDamageSpeed = 30f; //Hitting something faster then this will cause damage to your ship
 
@@ -28,8 +23,11 @@ public class PlayerShip : MonoBehaviour
 	Vector3 rotationInput;
 
 	bool intertialDampners;
+	bool allowControl = true;
 	float defaultDrag;
 	float defaultAngularDrag;
+	int lives = 3;
+	string causeOfDeath = "";
 
 
 	void Awake()
@@ -44,8 +42,6 @@ public class PlayerShip : MonoBehaviour
 
 		rb = GetComponent<Rigidbody>();
 
-		if(cockpitLight == null)
-			cockpitLight = GetComponentInChildren<Light>();
 		movementInput = new Vector3();
 		rotationInput = new Vector3();
 		intertialDampners = true;
@@ -53,15 +49,34 @@ public class PlayerShip : MonoBehaviour
 		defaultAngularDrag = rb.angularDrag;
 	}
 
+	private void Start()
+	{
+		UIManager.instance.UpdateLives(lives);
+	}
+
 	public void SetAllowControl(bool allow)
 	{
 		allowControl = allow;
 	}
 
+	IEnumerator PauseControlCoroutine(float seconds)
+	{
+		SetAllowControl(false);
+		yield return new WaitForSeconds(seconds);
+		SetAllowControl(true);
+	}
+
+	public void PauseControl(float seconds)
+	{
+		UIManager.instance.DisplayRespawnScreen(seconds, causeOfDeath);
+		IEnumerator coroutine = PauseControlCoroutine(seconds);
+		StartCoroutine(coroutine);
+	}
+
 	public void ToggleAllowControl()
 	{
 		allowControl = !allowControl;
-		Debug.Log($"Set allow control to {allowControl}");
+		Logger.Log($"Set allow control to {allowControl}");
 	}
 
 	void HandleInput()
@@ -74,13 +89,16 @@ public class PlayerShip : MonoBehaviour
 
 		if (allowControl)
 		{
+			//Toggle pause menu
 			if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
 			{
 				GameManager.instance.TogglePause();
 			}
 
+			//While game not paused
 			if (GameManager.instance.GetGameState() != GameManager.GameState.Paused)
 			{
+				//Move forward and backward
 				if (Input.GetKey(KeyCode.W))
 				{
 					if (Input.GetKey(KeyCode.LeftShift))
@@ -97,6 +115,7 @@ public class PlayerShip : MonoBehaviour
 					movementInput.z = 0;
 				}
 
+				//Move right and left
 				if (Input.GetKey(KeyCode.D))
 				{
 					movementInput.x = moveSpeed;
@@ -110,6 +129,7 @@ public class PlayerShip : MonoBehaviour
 					movementInput.x = 0;
 				}
 
+				//Move up and down
 				if (Input.GetKey(KeyCode.Space))
 				{
 					movementInput.y = moveSpeed;
@@ -123,6 +143,7 @@ public class PlayerShip : MonoBehaviour
 					movementInput.y = 0;
 				}
 
+				//Roll left and right
 				if (Input.GetKey(KeyCode.Q))
 				{
 					rotationInput.z = rollSpeed;
@@ -136,41 +157,20 @@ public class PlayerShip : MonoBehaviour
 					rotationInput.z = 0;
 				}
 
-				if (Input.GetMouseButton(0))
-				{
-					
-				}
-
-				if (Input.GetMouseButton(1))
-				{
-					
-				}
-
-				if (Input.GetKeyDown(KeyCode.F))
-				{
-					
-				}
-
-				if (Input.GetKeyDown(KeyCode.R))
-				{
-					
-				}
-
-				if (Input.GetKeyDown(KeyCode.L))
-				{
-					cockpitLight.enabled = !cockpitLight.enabled;
-				}
-
+				//DEBUG Change target framerate between 144 and 60
 				if (Input.GetKeyDown(KeyCode.T))
 				{
-					
+					GameManager.DebugToggleFrameRate();
+					Logger.Log($"Set target framerate to {Application.targetFrameRate}");
 				}
 
-				if (Input.GetKeyDown(KeyCode.G))
+				//DEBUG Kill the player immediately
+				if(Input.GetKeyDown(KeyCode.K))
 				{
-					
+					Kill();
 				}
 
+				//DEBUG? disable drag/speed limiter
 				if (Input.GetKeyDown(KeyCode.Z))
 				{
 					intertialDampners = !intertialDampners;
@@ -207,19 +207,39 @@ public class PlayerShip : MonoBehaviour
 		rb.AddRelativeTorque(rotationInput * Time.deltaTime);
 	}
 
-	public void Kill()
+	public int GetLives()
 	{
-		allowControl = false; //TEMP
-		rb.drag = 0;
-		rb.angularDrag = 0;
-		GameManager.instance.GameOver();
+		return lives;
 	}
 
+	public void Respawn()
+	{
+		transform.position = Vector3.zero;
+		transform.rotation = Quaternion.identity;
+		rb.Sleep();
+		PauseControl(5);
+	}
+
+	public void Kill()
+	{
+		if (lives-- > 0)
+		{
+			UIManager.instance.UpdateLives(lives);
+			Respawn();
+		}
+		else
+		{
+			SetAllowControl(false);
+			GameManager.instance.GameOver();
+		}
+	}
 
 	private void OnCollisionEnter(Collision collision)
 	{
 		if (Vector3.Project(collision.relativeVelocity, collision.GetContact(0).normal).magnitude > minDamageSpeed)
 		{
+			causeOfDeath = $"Hit {collision.gameObject.tag} too hard";
+
 			Kill();
 		}
 	}

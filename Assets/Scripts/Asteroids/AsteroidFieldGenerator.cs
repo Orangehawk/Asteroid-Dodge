@@ -41,7 +41,7 @@ public class AsteroidFieldGenerator : MonoBehaviour
 
 	public void Generate2DAsteroidField(int NumObjects, GameObject[] asteroids, Vector3 areaRadius, Vector3 safeRadius)
 	{
-		//Debug.Log("Generating 2D asteroid field");
+		//Logger.Log("Generating 2D asteroid field");
 
 		Vector3 pos;
 
@@ -76,7 +76,7 @@ public class AsteroidFieldGenerator : MonoBehaviour
 
 	public void Generate3DAsteroidField(int numObjects, GameObject[] asteroids, Vector3 areaRadius, Vector3 safeRadius)
 	{
-		Debug.Log("Generating 3D asteroid field");
+		Logger.Log("Generating 3D asteroid field");
 
 		int skips = 0; //Amount of times an overlap has caused a skip
 		int maxSkips = 50; //How many times we can skip instantiating before breaking the loop
@@ -122,11 +122,11 @@ public class AsteroidFieldGenerator : MonoBehaviour
 			}
 			else
 			{
-				//Debug.Log("Found overlap, skipping");
+				//Logger.Log("Found overlap, skipping");
 				i--;
 				if (skips++ > maxSkips)
 				{
-					Debug.Log($"Too many skips, aborting asteroid field generation. Total asteroids generated: {i}/{numObjects}");
+					Logger.Log($"Too many skips, aborting asteroid field generation. Total asteroids generated: {i}/{numObjects}");
 					break;
 				}
 			}
@@ -136,7 +136,7 @@ public class AsteroidFieldGenerator : MonoBehaviour
 
 	public void GenerateDynamic3DAsteroidField(int numObjects, GameObject[] asteroids, Vector3 areaRadius, Vector3 safeRadius)
 	{
-		Debug.Log("Generating dynamic 3D asteroid field");
+		Logger.Log("Generating dynamic 3D asteroid field");
 
 		int skips = 0; //Amount of times an overlap has caused a skip
 		int maxSkips = 50; //How many times we can skip instantiating before breaking the loop
@@ -201,11 +201,11 @@ public class AsteroidFieldGenerator : MonoBehaviour
 			}
 			else
 			{
-				//Debug.Log("Found overlap, skipping");
+				//Logger.Log("Found overlap, skipping");
 				i--;
 				if (skips++ > maxSkips)
 				{
-					Debug.Log($"Too many skips, aborting asteroid field generation. Total asteroids generated: {i}/{numObjects}");
+					Logger.Log($"Too many skips, aborting asteroid field generation. Total asteroids generated: {i}/{numObjects}");
 					break;
 				}
 			}
